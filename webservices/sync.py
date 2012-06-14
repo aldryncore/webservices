@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.views.decorators.csrf import csrf_exempt
 from webservices.models import BaseConsumer
 import requests
 
@@ -46,7 +47,7 @@ def provider_for_django(provider):
         signed_data = request.raw_post_data
         status_code, data = provider.get_response(method, signed_data, get_header)
         return HttpResponse(data, status=status_code)
-    return provider_view
+    return csrf_exempt(provider_view)
 
 def provider_for_flask(app, url, provider):
     from flask import request

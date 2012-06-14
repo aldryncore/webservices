@@ -4,3 +4,4 @@
 .*
 /htmlcov/
 /examples/env/
+/examples/django_app/keys.sqlite
