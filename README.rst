@@ -129,7 +129,7 @@ Twisted
             name = data.get('name', 'world')
             return {'greeting': u'hello %s' % name}
     
-    resource = provider_for_twisted(HelloProvider()
+    resource = provider_for_twisted(HelloProvider())
     
     site = Site(resource)
     reactor.listenTCP(80, site)
