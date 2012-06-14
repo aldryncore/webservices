@@ -3,3 +3,4 @@
 *.pyc
 .*
 /htmlcov/
+/examples/env/

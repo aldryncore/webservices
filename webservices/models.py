@@ -18,6 +18,7 @@ class BaseConsumer(object):
         signed_data = self.signer.dumps(data)
         headers = {
             PUBLIC_KEY_HEADER: self.public_key,
+            'Content-Type': 'application/json',
         }
         url = self.build_url(path)
         body = self.send_request(url, data=signed_data, headers=headers)
