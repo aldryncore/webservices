@@ -21,23 +21,23 @@ Installation
 Django (provider/consumer)
 ==========================
 
-``pip install webservices[django]``
+``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[django]``
 
 
 Flask (provider/consumer)
 =========================
 
-``pip install webservices[flask]``
+``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[flask]``
 
 Twisted (provider/consumer)
 ===========================
 
-``pip install webservices[twisted]``
+``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[twisted]``
 
 Synchronous consumer only
 =========================
 
-``pip install webservices[consumer]``
+``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[consumer]``
 
 
 **********
