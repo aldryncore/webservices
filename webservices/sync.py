@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.views.decorators.csrf import csrf_exempt
 from webservices.models import BaseConsumer
 import requests
 
@@ -39,6 +38,7 @@ class FlaskTestingConsumer(DjangoTestingConsumer):
 
 def provider_for_django(provider):
     from django.http import HttpResponse
+    from django.views.decorators.csrf import csrf_exempt
     def provider_view(request):
         def get_header(key, default):
             django_key = 'HTTP_%s' % key.upper().replace('-', '_')
