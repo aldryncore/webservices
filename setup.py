@@ -24,7 +24,7 @@ setup(
         'flask',
     ],
     packages=find_packages(),
-    include_package_data=True,
+    include_package_data=False,
     zip_safe = False,
-    test_suite = 'runtests',
+    test_suite = 'webservices.tests',
 )
