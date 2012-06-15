@@ -4,7 +4,7 @@ import webservices
 
 setup(
     author="Jonas Obrist",
-    name='django-cms',
+    name='webservices',
     version=webservices.__version__,
     license='BSD License',
     platforms=['OS Independent'],
