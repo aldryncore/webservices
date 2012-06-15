@@ -21,23 +21,23 @@ Installation
 Django (provider/consumer)
 ==========================
 
-``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[django]``
+``pip install webservices[django]``
 
 
 Flask (provider/consumer)
 =========================
 
-``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[flask]``
+``pip install webservices[flask]``
 
 Twisted (provider/consumer)
 ===========================
 
-``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[twisted]``
+``pip install webservices[twisted]``
 
 Synchronous consumer only
 =========================
 
-``pip install -e git+git://github.com/ojii/webservices.git#egg=webservices[consumer]``
+``pip install webservices[consumer]``
 
 
 **********
@@ -63,7 +63,7 @@ mapping to private keys.
     from myapi.views import HelloProvider
 
     urlpatterns = patterns('',
-        url(r'hello/$', provider_for_django(HelloProvider)),
+        url(r'hello/$', provider_for_django(HelloProvider())),
     )
 
 Your ``myapi/views.py``::
@@ -104,7 +104,7 @@ Flask
             name = data.get('name', 'world')
             return {'greeting': u'hello %s' % name}
     
-    provider_for_flask(app, '/hello/', HelloProvider()
+    provider_for_flask(app, '/hello/', HelloProvider())
 
 
 Twisted
