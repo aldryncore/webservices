@@ -23,7 +23,7 @@ class DjangoTestingConsumer(SyncConsumer):
         return path
     
     def send_request(self, url, data, headers):
-        headers = {'HTTP_%s' % header.upper().replace('-', '_'): value for header, value in headers.items()}
+        headers = dict([('HTTP_%s' % header.upper().replace('-', '_'), value) for header, value in headers.items()])
         response = self.test_client.post(url, data=data, content_type='application/json', **headers)
         self.raise_for_status(response.status_code, response.content)
         return response.content
