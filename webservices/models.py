@@ -70,7 +70,5 @@ class Provider(object):
             raw_response_data = self.provide(data)
         except:
             return (400, "Failed to process the request")
-        if not raw_response_data:
-            raise ValueError("Response data must always be provided")
         response_data = signer.dumps(raw_response_data)
         return (200, response_data)
