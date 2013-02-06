@@ -50,6 +50,9 @@ class Provider(object):
     def get_private_key(self, public_key):
         raise NotImplementedError("Subclasses of services.models.Provider must implement the get_private_key method")
 
+    def report_exception(self):
+        pass
+
     def get_response(self, method, signed_data, get_header):
         if method != 'POST':
             return (405, ['POST'])
@@ -69,6 +72,7 @@ class Provider(object):
         try:
             raw_response_data = self.provide(data)
         except:
+            self.report_exception()
             return (400, "Failed to process the request")
         response_data = signer.dumps(raw_response_data)
         return (200, response_data)

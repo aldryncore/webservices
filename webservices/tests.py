@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # must be first:
-from django.conf import settings; settings.configure(ROOT_URLCONF='webservices.tests', DATABASES={'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ':memory:'}})
+from django.conf import settings;settings.configure(ROOT_URLCONF='webservices.tests', DATABASES={'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ':memory:'}})
 # real import
+import sys
 from django.test.testcases import TestCase as DjangoTestCase
 from twisted.internet import reactor
 from twisted.trial.unittest import TestCase as TwistedTestCase
@@ -20,11 +21,18 @@ class GreetingProvider(Provider):
     keys = {
         'pubkey': 'privatekey'
     }
+    def __init__(self):
+        self.exceptions = []
     
     def get_private_key(self, key):
         return self.keys.get(key)
+
+    def report_exception(self):
+        self.exceptions.append(sys.exc_info())
     
     def provide(self, data):
+        if data.get('error'):
+            raise Exception('Error')
         name = data.get('name', 'World')
         return {'greeting': u'Hello %s!' % name}
 
@@ -46,7 +54,8 @@ class FlaskTests(TestCase):
         from flask import Flask
         app = Flask(__name__)
         app.config['TESTING'] = True
-        provider_for_flask(app, '/', GreetingProvider())
+        self.provider = GreetingProvider()
+        provider_for_flask(app, '/', self.provider)
         self.client = app.test_client()
     
     def test_greeting_provider(self):
@@ -66,6 +75,10 @@ class FlaskTests(TestCase):
         consumer = GetFlaskTestingConsumer(self.client, 'http://localhost', 'pubkey', 'wrongkey')
         self.assertRaises(WebserviceError, consumer.consume, '/', {'name': 'Test'})
 
+    def test_exception_hook(self):
+        consumer = FlaskTestingConsumer(self.client, 'http://localhost', 'pubkey', 'privatekey')
+        self.assertRaises(BadRequest, consumer.consume, '/', {'error': True})
+        self.assertEqual(len(self.provider.exceptions), 1)
 
 class DjangoTests(DjangoTestCase):
     def setUp(self):
