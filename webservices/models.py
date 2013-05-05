@@ -6,12 +6,33 @@ import urlparse
 PUBLIC_KEY_HEADER = 'x-services-public-key'
 
 
+def _split_dsn(dsn):
+    parse_result = urlparse.urlparse(dsn)
+    host = parse_result.hostname
+    if parse_result.port:
+        host += ':%s' % parse_result.port
+    base_url = urlparse.urlunparse((
+        parse_result.scheme,
+        host,
+        parse_result.path,
+        parse_result.params,
+        parse_result.query,
+        parse_result.fragment,
+    ))
+    return base_url, parse_result.username, parse_result.password
+
+
 class BaseConsumer(object):
     def __init__(self, base_url, public_key, private_key):
         self.base_url = base_url
         self.public_key = public_key
         self.signer = TimedSerializer(private_key)
-    
+
+    @classmethod
+    def from_dsn(cls, dsn):
+        base_url, public_key, private_key = _split_dsn(dsn)
+        return cls(base_url, public_key, private_key)
+
     def consume(self, path, data, max_age=None):
         if not path.startswith('/'):
             raise ValueError("Paths must start with a slash")

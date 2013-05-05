@@ -140,6 +140,13 @@ Noticed how the provider is basically the same for all three (other than
 ``get_private_key``)? Neat, right?
 
 
+Handling errors
+---------------
+
+To log errors (for example using raven) you can implement the ``report_exception`` method on ``Provider`` classes.
+This method is called whenever the ``provide`` method throws an exception. It takes no arguments.
+
+
 Consumer
 ========
 
@@ -172,6 +179,17 @@ Same as above, but async::
     deferred.addCallback(callback)
     
     reactor.run()
+
+
+Data Source Name
+----------------
+
+You can create consumers from Data Source Names (eg ``'http://public_key:private_key@api.example.org'``) using the
+``from_dsn`` classmethod on consumers.
+
+Example:
+
+    consumer = SyncConsumer.from_dsn('https://public_key:private_key@api.example.org')
 
     
 *******

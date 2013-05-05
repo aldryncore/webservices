@@ -10,7 +10,7 @@ from twisted.web.server import Site
 from unittest import TestCase
 from webservices.async import provider_for_twisted, TwistedConsumer
 from webservices.exceptions import BadRequest, WebserviceError
-from webservices.models import Provider, BaseConsumer
+from webservices.models import Provider, BaseConsumer, _split_dsn
 from webservices.sync import (provider_for_flask, FlaskTestingConsumer, 
     provider_for_django, DjangoTestingConsumer)
 
@@ -36,6 +36,7 @@ class GreetingProvider(Provider):
         name = data.get('name', 'World')
         return {'greeting': u'Hello %s!' % name}
 
+
 class GetFlaskTestingConsumer(FlaskTestingConsumer):
     def send_request(self, url, data, headers): # pragma: no cover
         response = self.test_client.get(url, data=data, headers=headers)
@@ -47,6 +48,12 @@ class BaseTests(TestCase):
     def test_consume_base_consumer(self):
         consumer = BaseConsumer('http://localhost', 'pubkey', 'privatekey')
         self.assertRaises(NotImplementedError, consumer.consume, '/', {'name': 'Test'})
+
+    def test_split_dsn(self):
+        base_url, public_key, private_key = _split_dsn('https://pub:priv@hostname.tld:1234/path')
+        self.assertEqual(base_url, 'https://hostname.tld:1234/path')
+        self.assertEqual(public_key, 'pub')
+        self.assertEqual(private_key, 'priv')
 
 
 class FlaskTests(TestCase):
@@ -80,6 +87,7 @@ class FlaskTests(TestCase):
         self.assertRaises(BadRequest, consumer.consume, '/', {'error': True})
         self.assertEqual(len(self.provider.exceptions), 1)
 
+
 class DjangoTests(DjangoTestCase):
     def setUp(self):
         from django.test.client import Client
@@ -96,14 +104,13 @@ class DjangoTests(DjangoTestCase):
         consumer = DjangoTestingConsumer(self.client, 'http://localhost', 'pubkey', 'privatekey')
         output = consumer.consume('/', {'name': 'Test'})
         self.assertEqual(output['greeting'], 'Hello Test!')
-    
+
     def test_greeting_provider_wrong_key(self):
         consumer = DjangoTestingConsumer(self.client, 'http://localhost', 'pubkey', 'wrongkey')
         self.assertRaises(BadRequest, consumer.consume, '/', {'name': 'Test'})
 
 
 class TwistedTests(TwistedTestCase):
-
     def setUp(self):
         resource = provider_for_twisted(GreetingProvider())
         factory = Site(resource)
