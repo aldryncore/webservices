@@ -47,7 +47,14 @@ class ProviderResource(Resource):
             request.write(data)
             request.finish()
 
-        signed_data = request.content.getvalue()
+        # XXX: This is not the correct way to pass the data to the processing
+        #      function. The content is read from disk and could be too large
+        #      to fit into memory. The correct way to go is to pass an open
+        #      file handler as argument instead of a single string, but this
+        #      would require each provider to be adapted.
+        request.content.seek(0)
+        signed_data = request.content.read()
+
         deferred = threads.deferToThread(
             self.provider.get_response,
             'POST',
