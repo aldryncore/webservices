@@ -11,7 +11,7 @@ setup(
     install_requires=[
         'itsdangerous',
     ],
-    extras_require = {
+    extras_require={
         'django':  ["django", "requests"],
         'flask': ["flask", "requests"],
         'twisted': ["twisted"],
@@ -25,6 +25,6 @@ setup(
     ],
     packages=find_packages(),
     include_package_data=False,
-    zip_safe = False,
-    test_suite = 'webservices.tests',
+    zip_safe=False,
+    test_suite='webservices.tests',
 )

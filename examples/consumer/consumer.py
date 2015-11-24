@@ -1,5 +1,7 @@
-from webservices.sync import SyncConsumer
 import argparse
+
+from webservices.sync import SyncConsumer
+
 
 def main():
     parser = argparse.ArgumentParser()
