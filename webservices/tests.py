@@ -2,6 +2,7 @@
 from django.conf import settings
 settings.configure(
     ROOT_URLCONF='webservices.tests',
+    ALLOWED_HOSTS='*',
     DATABASES={
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -125,7 +126,7 @@ class DjangoTests(DjangoTestCase):
         from django.conf.urls import url, patterns
         return patterns(
             '',
-            url(r'^$', provider_for_django(GreetingProvider()))
+            url(r'^$', provider_for_django(GreetingProvider())),
         )
 
     def test_greeting_provider(self):

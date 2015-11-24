@@ -12,7 +12,7 @@ setup(
         'itsdangerous',
     ],
     extras_require={
-        'django':  ["django", "requests"],
+        'django':  ["django<1.7", "requests"],
         'flask': ["flask", "requests"],
         'twisted': ["twisted"],
         'consumer': ["requests"],
@@ -20,7 +20,7 @@ setup(
     tests_require=[
         'twisted',
         'requests',
-        'django',
+        'django<1.7',
         'flask',
     ],
     packages=find_packages(),
