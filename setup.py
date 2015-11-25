@@ -11,8 +11,8 @@ setup(
     install_requires=[
         'itsdangerous',
     ],
-    extras_require = {
-        'django':  ["django", "requests"],
+    extras_require={
+        'django':  ["django<1.7", "requests"],
         'flask': ["flask", "requests"],
         'twisted': ["twisted"],
         'consumer': ["requests"],
@@ -20,11 +20,11 @@ setup(
     tests_require=[
         'twisted',
         'requests',
-        'django',
+        'django<1.7',
         'flask',
     ],
     packages=find_packages(),
     include_package_data=False,
-    zip_safe = False,
-    test_suite = 'webservices.tests',
+    zip_safe=False,
+    test_suite='webservices.tests',
 )
