@@ -11,7 +11,7 @@ def main():
     parser.add_argument('--host', default='http://localhost:8000/')
     args = parser.parse_args()
     consumer = SyncConsumer(args.host, args.public_key, args.private_key)
-    print consumer.consume('/', {'name': args.name})['greeting']
+    print(consumer.consume('/', {'name': args.name})['greeting'])
 
 if __name__ == '__main__':
     main()
