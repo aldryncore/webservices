@@ -1,4 +1,12 @@
-import urlparse
+# -*- coding: utf-8 -*-
+try:
+    # python 3
+    # noinspection PyCompatibility
+    from urllib.parse import urlparse, urlunparse, urljoin
+except ImportError:
+    # python 2
+    # noinspection PyCompatibility
+    from urlparse import urlparse, urlunparse, urljoin
 
 from itsdangerous import TimedSerializer, SignatureExpired, BadSignature
 
@@ -9,11 +17,11 @@ PUBLIC_KEY_HEADER = 'x-services-public-key'
 
 
 def _split_dsn(dsn):
-    parse_result = urlparse.urlparse(dsn)
+    parse_result = urlparse(dsn)
     host = parse_result.hostname
     if parse_result.port:
         host += ':%s' % parse_result.port
-    base_url = urlparse.urlunparse((
+    base_url = urlunparse((
         parse_result.scheme,
         host,
         parse_result.path,
@@ -62,7 +70,7 @@ class BaseConsumer(object):
 
     def build_url(self, path):
         path = path.lstrip('/')
-        return urlparse.urljoin(self.base_url, path)
+        return urljoin(self.base_url, path)
 
 
 class Provider(object):
